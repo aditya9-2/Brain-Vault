@@ -8,6 +8,7 @@ import { userAuthMiddleware } from "./middleware/AuthMiddleware";
 import contentsModel from "./models/contents.model";
 import { v4 as uuidv4 } from "uuid";
 import linksModel from "./models/links.model";
+import cors from "cors";
 
 dotenv.config();
 
@@ -16,6 +17,7 @@ const port = process.env.PORT || 3000;
 const app = express();
 
 app.use(express.json());
+app.use(cors());
 
 
 app.post("/api/v1/signup", async (req: Request, res: Response): Promise<any> => {
@@ -24,7 +26,7 @@ app.post("/api/v1/signup", async (req: Request, res: Response): Promise<any> => 
 
     const signUpSchema = z.object({
         username: z.string().min(6, "Username must be at least 6 characters long"),
-        password: z.string().min(20, "Password must be at least 20 characters long"),
+        password: z.string().min(8, "Password must be at least 20 characters long"),
     });
 
     try {
@@ -146,7 +148,7 @@ app.post("/api/v1/content", userAuthMiddleware, async (req: Request, res: Respon
 
     if (!type) {
         return res.status(411).json({
-            message: "type should be 'image', 'video', 'article', 'audio'"
+            message: "type should be 'twitter', 'youtube'"
         });
     }
 
@@ -275,23 +277,22 @@ app.post("/api/v1/brain/share", userAuthMiddleware, async (req: Request, res: Re
                 link: `/api/v1/brain/${hash}`,
             });
 
-        } else {
-
-            const result = await linksModel.findOneAndDelete({
-                userId,
-            });
-
-            if (!result) {
-                return res.status(404).json({
-                    message: "No shared link found to delete",
-                });
-            }
-
-            return res.status(200).json({
-                message: "Brain link deleted successfully",
-            });
-
         }
+
+        // for delete 
+        // const result = await linksModel.findOneAndDelete({
+        //     userId,
+        // });
+
+        // if (!result) {
+        //     return res.status(404).json({
+        //         message: "No shared link found to delete",
+        //     });
+        // }
+
+        // return res.status(200).json({
+        //     message: "Brain link deleted successfully",
+        // });
 
     } catch (err) {
         const error = err as Error;

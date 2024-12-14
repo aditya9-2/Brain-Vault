@@ -1,7 +1,7 @@
 import mongoose from "mongoose"
 
 
-const contentTypes = ['image', 'video', 'article', 'audio'];
+const contentTypes = ['twitter', 'youtube'];
 
 const contentSchema = new mongoose.Schema({
     title: { type: String, required: true, },
