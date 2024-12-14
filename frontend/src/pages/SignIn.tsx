@@ -1,16 +1,50 @@
 import { useNavigate } from "react-router-dom"
 import Button from "../components/Buttons/Button"
 import InputBox from "../components/Input/InputBox"
+import { useRef } from "react";
+import axios from "axios";
+import { BACKEND_URL } from "../config";
 
 const SignIn = () => {
     const navigate = useNavigate();
-    const gotoSignup = () => {
+
+    const usernameRef = useRef<HTMLInputElement>(null);
+    const passwordRef = useRef<HTMLInputElement>(null);
+
+    const gotoSignup = async () => {
 
         navigate("/signup")
     }
-    const toggleChange = () => {
 
-    }
+    const handleSignIn = async () => {
+
+        try {
+            const username = usernameRef.current?.value;
+            const password = passwordRef.current?.value;
+
+            if (!username || !password) {
+                alert("Please fill in all fields");
+                return;
+            }
+
+            const response = await axios.post(`${BACKEND_URL}/api/v1/signin`, {
+                username,
+                password
+            });
+            const tokenData = response.data.token;
+            localStorage.setItem("token", tokenData)
+
+            if (tokenData) {
+                navigate("/dashboard")
+            }
+
+
+        } catch (error) {
+            console.error("Signup failed:", error);
+            alert("Signup failed. Please try again.");
+        }
+    };
+
     return (
         <div className="w-screen h-screen flex justify-center items-center bg-gray-300 ">
 
@@ -20,8 +54,8 @@ const SignIn = () => {
 
                 <div className="flex flex-col gap-2">
 
-                    <InputBox onChange={toggleChange} placeholder="Enter username" type="text" />
-                    <InputBox onChange={toggleChange} placeholder="Enter password" type="password" />
+                    <InputBox ref={usernameRef} placeholder="Enter username" type="text" />
+                    <InputBox ref={passwordRef} placeholder="Enter password" type="password" />
                 </div>
 
 
@@ -30,7 +64,7 @@ const SignIn = () => {
                     <p>do not have account? <span className=" text-blue-600 cursor-pointer" onClick={gotoSignup}>Create account</span></p>
                 </div>
                 <div className="flex flex-col justify-center items-center mt-6">
-                    <Button varient="primary" text="Signin" loading={false} />
+                    <Button varient="primary" text="Signin" loading={false} onClick={handleSignIn} />
 
                 </div>
 

@@ -4,7 +4,7 @@ import { RiDeleteBin6Line } from "react-icons/ri";
 interface CardProps {
     title: string,
     link: string,
-    type: "twitter" | "youtube";
+    type: string
 
 }
 
@@ -13,10 +13,9 @@ const Card = ({ title, link, type }: CardProps) => {
         <div className={`
             bg-white  
             max-w-72 
-            min-h-40 
             border 
             border-gray-200 
-            rounded 
+            rounded-lg 
             p-4 `}>
 
 

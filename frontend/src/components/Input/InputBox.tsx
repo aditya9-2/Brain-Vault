@@ -1,15 +1,23 @@
+import { forwardRef } from "react";
 
-const InputBox = ({ onChange, placeholder, type }: { onChange: () => void; placeholder: string; type: string }) => {
-    return (
-        <div className='px-4 py-2 border rounded-md m-2'>
-            <input
-                type={type}
-                placeholder={placeholder}
-                onChange={onChange}
-                className="w-full outline-none"
-            />
-        </div>
-    );
-};
+interface InputProps {
+    placeholder: string;
+    type: string;
+}
+
+const InputBox = forwardRef<HTMLInputElement, InputProps>(
+    ({ placeholder, type }, ref) => {
+        return (
+            <div className="px-4 py-2 border rounded-md m-2">
+                <input
+                    ref={ref} // Forward the ref to the input element
+                    type={type}
+                    placeholder={placeholder}
+                    className="w-full outline-none"
+                />
+            </div>
+        );
+    }
+);
 
 export default InputBox;

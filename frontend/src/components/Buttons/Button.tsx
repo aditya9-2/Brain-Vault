@@ -26,7 +26,7 @@ const Button = ({ varient, text, startIcon, onClick, loading, width, }: ButtonPr
                 
             `}
             disabled={loading}
-            onClick={loading ? onClick : undefined} // Prevent click if loading is true
+            onClick={onClick}
 
         >
 
